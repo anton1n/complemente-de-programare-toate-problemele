@@ -1,0 +1,53 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2708
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\froman\fcharset0 Times-Italic;\f2\froman\fcharset0 Times-Bold;
+\f3\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c93333;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs32 \cf0 \expnd0\expndtw0\kerning0
+Function: 
+\f1\i ssize_t
+\f0\i0  
+\f2\b write
+\f0\b0  
+\f1\i (int filedes, const void *buffer, size_t size)
+\f0\i0 \cf2  \'b6\cf0 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 Preliminary: | MT-Safe | AS-Safe | AC-Safe | See {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/POSIX-Safety-Concepts.html"}}{\fldrslt \cf2 \ul \ulc2 POSIX Safety Concepts}}.\
+The 
+\f3\fs26 write
+\f0\fs32  function writes up to 
+\f1\i size
+\f0\i0  bytes from 
+\f1\i buffer
+\f0\i0  to the file with descriptor 
+\f1\i filedes
+\f0\i0 . The data in 
+\f1\i buffer
+\f0\i0  is not necessarily a character string and a null character is output like any other character.\
+The return value is the number of bytes actually written. This may be 
+\f1\i size
+\f0\i0 , but can always be smaller. Your program should always call 
+\f3\fs26 write
+\f0\fs32  in a loop, iterating until all the data is written.\
+Once 
+\f3\fs26 write
+\f0\fs32  returns, the data is enqueued to be written and can be read back right away, but it is not necessarily written out to permanent storage immediately. You can use 
+\f3\fs26 fsync
+\f0\fs32  when you need to be sure your data has been permanently stored before continuing. (It is more efficient for the system to batch up consecutive writes and do them all at once when convenient. Normally they will always be written to disk within a minute or less.) Modern systems provide another function 
+\f3\fs26 fdatasync
+\f0\fs32  which guarantees integrity only for the file data and is therefore faster. You can use the 
+\f3\fs26 O_FSYNC
+\f0\fs32  open mode to make 
+\f3\fs26 write
+\f0\fs32  always store the data to disk before returning; see {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Operating-Modes.html"}}{\fldrslt \cf2 \ul \ulc2 I/O Operating Modes}}.\
+In the case of an error, 
+\f3\fs26 write
+\f0\fs32  returns 
+\f1\i -1
+\f0\i0 . The following 
+\f3\fs26 errno
+\f0\fs32  error conditions are defined for this function:}

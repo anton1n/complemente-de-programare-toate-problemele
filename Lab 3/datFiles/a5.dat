@@ -1,0 +1,116 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2708
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\froman\fcharset0 Times-Roman;\f2\froman\fcharset0 Times-Bold;
+\f3\froman\fcharset0 Times-Italic;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c93333;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 \expnd0\expndtw0\kerning0
+EAGAIN
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 Normally, 
+\f0\fs26 write
+\f1\fs32  blocks until the write operation is complete. But if the 
+\f0\fs26 O_NONBLOCK
+\f1\fs32  flag is set for the file (see {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Control-Operations.html"}}{\fldrslt \cf2 \ul \ulc2 Control Operations on Files}}), it returns immediately without writing any data and reports this error. An example of a situation that might cause the process to block on output is writing to a terminal device that supports flow control, where output has been suspended by receipt of a STOP character.\
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b \cf0 Compatibility Note:
+\f1\b0  Most versions of BSD Unix use a different error code for this: 
+\f0\fs26 EWOULDBLOCK
+\f1\fs32 . In the GNU C Library, 
+\f0\fs26 EWOULDBLOCK
+\f1\fs32  is an alias for 
+\f0\fs26 EAGAIN
+\f1\fs32 , so it doesn\'92t matter which name you use.\
+On some systems, writing a large amount of data from a character special file can also fail with 
+\f0\fs26 EAGAIN
+\f1\fs32  if the kernel cannot find enough physical memory to lock down the user\'92s pages. This is limited to devices that transfer with direct memory access into the user\'92s memory, which means it does not include terminals, since they always use separate buffers inside the kernel. This problem does not arise on GNU/Hurd systems.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EBADF
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 The 
+\f3\i filedes
+\f1\i0  argument is not a valid file descriptor, or is not open for writing.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EFBIG
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 The size of the file would become larger than the implementation can support.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EINTR
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 The 
+\f0\fs26 write
+\f1\fs32  operation was interrupted by a signal while it was blocked waiting for completion. A signal will not necessarily cause 
+\f0\fs26 write
+\f1\fs32  to return 
+\f0\fs26 EINTR
+\f1\fs32 ; it may instead result in a successful 
+\f0\fs26 write
+\f1\fs32  which writes fewer bytes than requested. See {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Interrupted-Primitives.html"}}{\fldrslt \cf2 \ul \ulc2 Primitives Interrupted by Signals}}.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EIO
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 For many devices, and for disk files, this error code indicates a hardware error.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 ENOSPC
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 The device containing the file is full.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EPIPE
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 This error is returned when you try to write to a pipe or FIFO that isn\'92t open for reading by any process. When this happens, a 
+\f0\fs26 SIGPIPE
+\f1\fs32  signal is also sent to the process; see {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html"}}{\fldrslt \cf2 \ul \ulc2 Signal Handling}}.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EINVAL
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 In some systems, when writing to a character or block device, position and size offsets must be aligned to a particular block size. This error indicates that the offsets were not properly aligned.\
+Unless you have arranged to prevent 
+\f0\fs26 EINTR
+\f1\fs32  failures, you should check 
+\f0\fs26 errno
+\f1\fs32  after each failing call to 
+\f0\fs26 write
+\f1\fs32 , and if the error was 
+\f0\fs26 EINTR
+\f1\fs32 , you should simply repeat the call. See {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Interrupted-Primitives.html"}}{\fldrslt \cf2 \ul \ulc2 Primitives Interrupted by Signals}}. The easy way to do this is with the macro 
+\f0\fs26 TEMP_FAILURE_RETRY
+\f1\fs32 , as follows:\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 nbytes = TEMP_FAILURE_RETRY (write (desc, buffer, count));\
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\fs32 \cf0 Please note that there is no function named 
+\f0\fs26 write64
+\f1\fs32 . This is not necessary since this function does not directly modify or handle the possibly wide file offset. Since the kernel handles this state internally the 
+\f0\fs26 write
+\f1\fs32  function can be used for all cases.\
+This function is a cancellation point in multi-threaded programs. This is a problem if the thread allocates some resources (like memory, file descriptors, semaphores or whatever) at the time 
+\f0\fs26 write
+\f1\fs32  is called. If the thread gets canceled these resources stay allocated until the program ends. To avoid this, calls to 
+\f0\fs26 write
+\f1\fs32  should be protected using cancellation handlers.\
+The 
+\f0\fs26 write
+\f1\fs32  function is the underlying primitive for all of the functions that write to streams, such as 
+\f0\fs26 fputc
+\f1\fs32 .}

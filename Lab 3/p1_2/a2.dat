@@ -1,0 +1,96 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2708
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\froman\fcharset0 Times-Roman;\f2\froman\fcharset0 Times-Bold;
+\f3\froman\fcharset0 Times-Italic;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c93333;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 \expnd0\expndtw0\kerning0
+EAGAIN
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 Normally, when no input is immediately available, 
+\f0\fs26 read
+\f1\fs32  waits for some input. But if the 
+\f0\fs26 O_NONBLOCK
+\f1\fs32  flag is set for the file (see {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/File-Status-Flags.html"}}{\fldrslt \cf2 \ul \ulc2 File Status Flags}}), 
+\f0\fs26 read
+\f1\fs32  returns immediately without reading any data, and reports this error.\
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b \cf0 Compatibility Note:
+\f1\b0  Most versions of BSD Unix use a different error code for this: 
+\f0\fs26 EWOULDBLOCK
+\f1\fs32 . In the GNU C Library, 
+\f0\fs26 EWOULDBLOCK
+\f1\fs32  is an alias for 
+\f0\fs26 EAGAIN
+\f1\fs32 , so it doesn\'92t matter which name you use.\
+On some systems, reading a large amount of data from a character special file can also fail with 
+\f0\fs26 EAGAIN
+\f1\fs32  if the kernel cannot find enough physical memory to lock down the user\'92s pages. This is limited to devices that transfer with direct memory access into the user\'92s memory, which means it does not include terminals, since they always use separate buffers inside the kernel. This problem never happens on GNU/Hurd systems.\
+Any condition that could result in 
+\f0\fs26 EAGAIN
+\f1\fs32  can instead result in a successful 
+\f0\fs26 read
+\f1\fs32  which returns fewer bytes than requested. Calling 
+\f0\fs26 read
+\f1\fs32  again immediately would result in 
+\f0\fs26 EAGAIN
+\f1\fs32 .\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EBADF
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 The 
+\f3\i filedes
+\f1\i0  argument is not a valid file descriptor, or is not open for reading.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EINTR
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\fs26 \cf0 read
+\f1\fs32  was interrupted by a signal while it was waiting for input. See {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Interrupted-Primitives.html"}}{\fldrslt \cf2 \ul \ulc2 Primitives Interrupted by Signals}}. A signal will not necessarily cause 
+\f0\fs26 read
+\f1\fs32  to return 
+\f0\fs26 EINTR
+\f1\fs32 ; it may instead result in a successful 
+\f0\fs26 read
+\f1\fs32  which returns fewer bytes than requested.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EIO
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 For many devices, and for disk files, this error code indicates a hardware error.\
+
+\f0\fs26 EIO
+\f1\fs32  also occurs when a background process tries to read from the controlling terminal, and the normal action of stopping the process by sending it a 
+\f0\fs26 SIGTTIN
+\f1\fs32  signal isn\'92t working. This might happen if the signal is being blocked or ignored, or because the process group is orphaned. See {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Job-Control.html"}}{\fldrslt \cf2 \ul \ulc2 Job Control}}, for more information about job control, and {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html"}}{\fldrslt \cf2 \ul \ulc2 Signal Handling}}, for information about signals.\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 EINVAL
+\f1\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 In some systems, when reading from a character or block device, position and size offsets must be aligned to a particular block size. This error indicates that the offsets were not properly aligned.\
+Please note that there is no function named 
+\f0\fs26 read64
+\f1\fs32 . This is not necessary since this function does not directly modify or handle the possibly wide file offset. Since the kernel handles this state internally, the 
+\f0\fs26 read
+\f1\fs32  function can be used for all cases.\
+This function is a cancellation point in multi-threaded programs. This is a problem if the thread allocates some resources (like memory, file descriptors, semaphores or whatever) at the time 
+\f0\fs26 read
+\f1\fs32  is called. If the thread gets canceled these resources stay allocated until the program ends. To avoid this, calls to 
+\f0\fs26 read
+\f1\fs32  should be protected using cancellation handlers.\
+The 
+\f0\fs26 read
+\f1\fs32  function is the underlying primitive for all of the functions that read from streams, such as 
+\f0\fs26 fgetc
+\f1\fs32 .}

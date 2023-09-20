@@ -1,0 +1,92 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2708
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\froman\fcharset0 Times-Italic;\f2\froman\fcharset0 Times-Bold;
+\f3\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c93333;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs32 \cf0 \expnd0\expndtw0\kerning0
+Function: 
+\f1\i ssize_t
+\f0\i0  
+\f2\b pread
+\f0\b0  
+\f1\i (int filedes, void *buffer, size_t size, off_t offset)
+\f0\i0 \cf2  \'b6\cf0 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 Preliminary: | MT-Safe | AS-Safe | AC-Safe | See {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/POSIX-Safety-Concepts.html"}}{\fldrslt \cf2 \ul \ulc2 POSIX Safety Concepts}}.\
+The 
+\f3\fs26 pread
+\f0\fs32  function is similar to the 
+\f3\fs26 read
+\f0\fs32  function. The first three arguments are identical, and the return values and error codes also correspond.\
+The difference is the fourth argument and its handling. The data block is not read from the current position of the file descriptor 
+\f3\fs26 filedes
+\f0\fs32 . Instead the data is read from the file starting at position 
+\f1\i offset
+\f0\i0 . The position of the file descriptor itself is not affected by the operation. The value is the same as before the call.\
+When the source file is compiled with 
+\f3\fs26 _FILE_OFFSET_BITS == 64
+\f0\fs32  the 
+\f3\fs26 pread
+\f0\fs32  function is in fact 
+\f3\fs26 pread64
+\f0\fs32  and the type 
+\f3\fs26 off_t
+\f0\fs32  has 64 bits, which makes it possible to handle files up to 2^63 bytes in length.\
+The return value of 
+\f3\fs26 pread
+\f0\fs32  describes the number of bytes read. In the error case it returns 
+\f1\i -1
+\f0\i0  like 
+\f3\fs26 read
+\f0\fs32  does and the error codes are also the same, with these additions:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 EINVAL
+\f0\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 The value given for 
+\f1\i offset
+\f0\i0  is negative and therefore illegal.\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 ESPIPE
+\f0\fs32 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 The file descriptor 
+\f1\i filedes
+\f0\i0  is associated with a pipe or a FIFO and this device does not allow positioning of the file pointer.\
+The function is an extension defined in the Unix Single Specification version 2.\
+\pard\pardeftab720\partightenfactor0
+\cf0 Function: 
+\f1\i ssize_t
+\f0\i0  
+\f2\b pread64
+\f0\b0  
+\f1\i (int filedes, void *buffer, size_t size, off64_t offset)
+\f0\i0 \cf2  \'b6\cf0 \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 Preliminary: | MT-Safe | AS-Safe | AC-Safe | See {\field{\*\fldinst{HYPERLINK "https://www.gnu.org/software/libc/manual/html_node/POSIX-Safety-Concepts.html"}}{\fldrslt \cf2 \ul \ulc2 POSIX Safety Concepts}}.\
+This function is similar to the 
+\f3\fs26 pread
+\f0\fs32  function. The difference is that the 
+\f1\i offset
+\f0\i0  parameter is of type 
+\f3\fs26 off64_t
+\f0\fs32  instead of 
+\f3\fs26 off_t
+\f0\fs32  which makes it possible on 32 bit machines to address files larger than 2^31 bytes and up to 2^63 bytes. The file descriptor 
+\f3\fs26 filedes
+\f0\fs32  must be opened using 
+\f3\fs26 open64
+\f0\fs32  since otherwise the large offsets possible with 
+\f3\fs26 off64_t
+\f0\fs32  will lead to errors with a descriptor in small file mode.\
+When the source file is compiled with 
+\f3\fs26 _FILE_OFFSET_BITS == 64
+\f0\fs32  on a 32 bit machine this function is actually available under the name 
+\f3\fs26 pread
+\f0\fs32  and so transparently replaces the 32 bit interface.}
